@@ -1,0 +1,171 @@
+
+<link rel="stylesheet" href="style.css">
+
+<script>
+    function homeKeyframeGen(x, y) {
+        return [{ width: "0%", left: "100%", opacity: "0%" }, { width: x, left: y, opacity: "100%" }]
+    }
+    function awayKeyframeGen(x, y) {
+        return [{ width: "0%", right: "100%", opacity: "0%" }, { width: x, right: y, opacity: "100%" }]
+    }
+    // Define a function to scale the font size
+    function scaleFontSize() {
+        // Get a reference to the table element
+        var table = document.getElementById("myTable");
+
+        // Calculate the number of rows in the table
+        var numRows = table.rows.length;
+
+        // Define the base font size and scaling factor
+        var baseFontSize = 87; // Change this to your desired base font size
+        var scalingFactor = 5; // Adjust this as needed
+
+        // Calculate the new font size based on the number of rows
+        var newFontSize = baseFontSize - (numRows * scalingFactor);
+
+        // Select all <p> elements and set their font size to the calculated value
+        var paragraphs = document.getElementsByTagName("p");
+        for (var i = 0; i < paragraphs.length; i++) {
+            paragraphs[i].style.fontSize = newFontSize + "px";
+        }
+        var bgmid = document.getElementsByClassName("bgMid");
+        bgmid[0].clientHeight
+        var barsL = document.getElementsByClassName("bar-home");
+        var barsR = document.getElementsByClassName("bar-away");
+        var waitTime = 0;
+        var shrinkWrapFactor = 0.2
+        var animationsH = [homeKeyframeGen("95.0%","3.0000000000000027%"),homeKeyframeGen("38.0%","60.0%"),homeKeyframeGen("79.73214285714285%","18.267857142857146%"),homeKeyframeGen("95.0%","3.0000000000000027%"),homeKeyframeGen("95.0%","3.0000000000000027%"),homeKeyframeGen("95.0%","3.0000000000000027%")]
+        var animationsA = [awayKeyframeGen("44.99999999999999%","53.0%"),awayKeyframeGen("95.0%","3.0000000000000027%"),awayKeyframeGen("95.0%","3.0000000000000027%"),awayKeyframeGen("71.24999999999999%","26.750000000000007%"),awayKeyframeGen("95.0%","3.0000000000000027%"),awayKeyframeGen("70.79617834394904%","27.203821656050962%")]
+
+        for (var i = 0; i < barsL.length; i++) {
+            // Calculate the delay for each element
+            var delay = i * 100; // 200 milliseconds delay for each i
+
+            // Use setTimeout to schedule the animation with the calculated delay
+            setTimeout(function (index) {
+                return function () {
+                    barsL[index].style.height = bgmid[0].getBoundingClientRect().height - shrinkWrapFactor * bgmid[0].getBoundingClientRect().height;
+                    barsL[index].style.top = shrinkWrapFactor / 2 * bgmid[0].getBoundingClientRect().height;
+                    barsR[index].style.height = bgmid[0].getBoundingClientRect().height - shrinkWrapFactor * bgmid[0].getBoundingClientRect().height;
+                    barsR[index].style.top = shrinkWrapFactor / 2 * bgmid[0].getBoundingClientRect().height;
+                    var animationH = animationsH[index];
+                    var animationA = animationsA[index];
+                    barsL[index].animate(animationH, { duration: 2000, iterations: 1, fill: "both", easing: "ease" });
+                    barsR[index].animate(animationA, { duration: 2000, iterations: 1, fill: "both", easing: "ease" });
+                };
+            }(i), delay);
+        }
+    }
+
+    // Call the scaleFontSize function when the document is fully loaded
+    window.onload = scaleFontSize;
+</script>
+
+
+<body>
+<table id="myTable">
+
+            <tr>
+            <th>
+                <div class="bghome" style="background-color: rgba(255,100,0);">
+                    <p>Homelanders</p>
+                </div>
+            </th>
+            <th style="width: 15%;">
+                <div class="bgMid">
+                    <p>Stat</p>
+                </div>
+            </th>
+            <th>
+                <div class="bgaway" style="background-color: rgba(0,100,255);">
+                    <p>Away Squad</p>
+                </div>
+            </th>
+        </tr>
+        
+    <tr>
+        <td>
+            <!-- home bar -->
+            <div class="bar-home" style="background-color: rgba(255,100,0, 0.85);"><p class="homeT">19</p></div>
+        </td>
+        <td>
+            <div class="bgMid" style="background-color: rgba(0, 0, 0, 0.65);"><p>shots</p></div>
+        </td>
+        <td class = "away">
+            <!-- away bar -->
+            <div class="bar-away" style="background-color: rgba(0,100,255, 0.6131578947368421);"><p class="awayT">9</p></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <!-- home bar -->
+            <div class="bar-home" style="background-color: rgba(255,100,0, 0.5800000000000001);"><p class="homeT">4</p></div>
+        </td>
+        <td>
+            <div class="bgMid" style="background-color: rgba(0, 0, 0, 0.65);"><p>saves</p></div>
+        </td>
+        <td class = "away">
+            <!-- away bar -->
+            <div class="bar-away" style="background-color: rgba(0,100,255, 0.85);"><p class="awayT">10</p></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <!-- home bar -->
+            <div class="bar-home" style="background-color: rgba(255,100,0, 0.7776785714285714);"><p class="homeT">47</p></div>
+        </td>
+        <td>
+            <div class="bgMid" style="background-color: rgba(0, 0, 0, 0.65);"><p>goal_succ_rate</p></div>
+        </td>
+        <td class = "away">
+            <!-- away bar -->
+            <div class="bar-away" style="background-color: rgba(0,100,255, 0.85);"><p class="awayT">56</p></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <!-- home bar -->
+            <div class="bar-home" style="background-color: rgba(255,100,0, 0.85);"><p class="homeT">56</p></div>
+        </td>
+        <td>
+            <div class="bgMid" style="background-color: rgba(0, 0, 0, 0.65);"><p>passes</p></div>
+        </td>
+        <td class = "away">
+            <!-- away bar -->
+            <div class="bar-away" style="background-color: rgba(0,100,255, 0.7375);"><p class="awayT">42</p></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <!-- home bar -->
+            <div class="bar-home" style="background-color: rgba(255,100,0, 0.85);"><p class="homeT">3</p></div>
+        </td>
+        <td>
+            <div class="bgMid" style="background-color: rgba(0, 0, 0, 0.65);"><p>post_hits</p></div>
+        </td>
+        <td class = "away">
+            <!-- away bar -->
+            <div class="bar-away" style="background-color: rgba(0,100,255, 0.85);"><p class="awayT">3</p></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <!-- home bar -->
+            <div class="bar-home" style="background-color: rgba(255,100,0, 0.85);"><p class="homeT">157</p></div>
+        </td>
+        <td>
+            <div class="bgMid" style="background-color: rgba(0, 0, 0, 0.65);"><p>possession_time_sec</p></div>
+        </td>
+        <td class = "away">
+            <!-- away bar -->
+            <div class="bar-away" style="background-color: rgba(0,100,255, 0.7353503184713375);"><p class="awayT">117</p></div>
+        </td>
+    </tr>
+
+</table>
+</body>

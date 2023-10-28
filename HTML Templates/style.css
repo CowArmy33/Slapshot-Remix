@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+.bghome {
+    height: 100%;
+    width: 100%;
+    background-color: blue;
+    transform: skew(0);
+    clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
+    box-shadow: 0px 10px rgba(0, 0, 0, 0.777);
+    display: flex;
+}
+
+.bgMid {
+    transform: skew(0);
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    display: flex;
+}
+
+.bgaway {
+    height: 100%;
+    width: 100%;
+    background-color: red;
+    clip-path: polygon(0 0, 90% 0, 100% 100%, 0% 100%);
+    transform: skew(0);
+    box-shadow: 0px 10px rgba(0, 0, 0, 0.777);
+    display: flex;
+}
+
+.container {
+    padding-left: 30px;
+    margin-right: 0px;
+    width: fit-content;
+    height: fit-content;
+    display: inline-block;
+}
+
+p {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    text-shadow: 3px 3px black;
+}
+
+
+.center {
+    margin-left: 50%;
+    width: fit-content;
+    height: fit-content;
+    transform: translate(-50%);
+}
+
+th {
+    width: auto;
+    height: auto;
+    padding-bottom: 1.5%;
+    padding-left: .5%;
+    padding-right: .5%;
+    filter: drop-shadow(10px 10px 0px rgba(0, 0, 0, 0.777))
+}
+
+td {
+    position: relative;
+    width: auto;
+    height: auto;
+    padding-bottom: 1.5%;
+    padding-left: .5%;
+    padding-right: .5%;
+    filter: drop-shadow(10px 10px 0px rgba(0, 0, 0, 0.777))
+}
+
+.home {
+    padding-bottom: 1.5%;
+    padding-left: .5%;
+    padding-right: .5%;
+}
+
+table {
+    width: 100%;
+    height: 100%;
+    padding: 1vh;
+}
+
+.bar-home {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    opacity: 0%;
+    /* Start with 0% width */
+    height: 100%;
+    background-color: blue;
+    /* Adjust the color as needed */
+    z-index: -1;
+    /* Send the bars behind the content */
+    /*animation: expandLeft 2s ease;*/
+    /* Animation for left to right */
+    animation-fill-mode: forwards;
+    text-align: right;
+}
+
+.bar-away {
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0%;
+    width: 0%;
+    /* Start with 0% width */
+    height: 100%;
+    background-color: red;
+    /* Adjust the color as needed */
+    z-index: -1;
+    /* Send the bars behind the content */
+    /*animation: expandRight 2s ease;*/
+    /* Animation for right to left */
+    animation-fill-mode: forwards;
+}
+.homeT {
+    position:relative;
+    padding-right: 50px;
+}
+.awayT {
+    position:relative;
+    padding-left: 50px;
+}
+
+@keyframes expandLeft {
+    0% {
+        width: 0%;
+        left: 100%;
+        /* Start from the right edge */
+    }
+
+    100% {
+        width: 95%;
+        left: 3%;
+        /* Fill towards the left */
+    }
+}
+
+@keyframes expandRight {
+    0% {
+        width: 0%;
+        right: 100%;
+    }
+
+    100% {
+        width: 95%;
+        right: 3%;
+    }
+}
