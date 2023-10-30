@@ -55,12 +55,3 @@ def setTeams(team1: Team, team2: Team, basePath: str):
 
     baseImg = generate_gradient(c1, c2, 1920, 1080)
     baseImg.save(gradientPath + "\\gradient.png", "png")
-
-
-T1 = Team("Temp", "TMP", "aaa", Colour(255, 0, 255),
-          r'C:\Users\lukew\Downloads\Untitled-3.png', ['ligma', 'frank', 'george'])
-T2 = Team("Temp2", "TMP2", "aaa", Colour(0, 255, 0),
-          r'C:\Users\lukew\Downloads\Untitled-3.png', ['balls', 'Piss', 'Geff'])
-
-setTeams(T1, T2, r'H:\!Personal Projects\Slap Streaming Toll Python Port\Tests')
-
