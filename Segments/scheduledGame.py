@@ -1,9 +1,10 @@
+from Segments.timestamp import getRelative, getStamp
 class Colour:
     def __init__(self, r:int, g:int, b:int):
         self.R = r
         self.G = g
         self.B = b
-    def compare(self, colour: Colour):
+    def compare(self, colour):
         "Returns False if two colors are too close to eachother in terms of RGB"
         r = self.R = colour.R
         g = self.G = colour.G
@@ -32,16 +33,20 @@ def getValidColours(c1: Colour, c2: Colour):
     return(red, blue)
 
 class Team:
-    def __init__(self, teamName: str, discordId: str, colour: Colour, image: str):
+    def __init__(self, teamName: str, accronym: str, discordId: str, colour: Colour, image: str, players: list[str]):
         self.teamName = teamName
         self.discordId = discordId
         self.colour = colour
         self.image = image
+        self.players = players
+        self.accronym = accronym
 class Game:
     def __init__(self, homeTeam: Team, awayTeam: Team, hour, minute):
         self.time = (hour, minute)
         self.homeTeam = homeTeam
         self.awayTeam = awayTeam
+        self.timeRel = getRelative(hour, minute)
+        self.timeCon = getStamp(hour, minute)
     def __repr__(self) -> str:
         string = f"{self.time}, {self.homeTeam}, {self.awayTeam}"
         return string

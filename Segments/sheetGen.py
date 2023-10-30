@@ -130,6 +130,7 @@ s = StatPuller(
 
 
 def makeStats(stats: dict, homeTeam: Team, awayTeam: Team, dest: str):
+    "Takes the stats made by a statPuller, the home team, and away team, followed by the destination, where an HTML file will be output containing the statistics needed"
     firstRow = f"""
             <tr>
             <th>
