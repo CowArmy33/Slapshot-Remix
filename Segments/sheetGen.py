@@ -1,8 +1,221 @@
-from scheduledGame import Team
-from statPuller import Stat, StatPuller
+from Segments.scheduledGame import Team
+from Segments.statPuller import Stat, StatPuller
+import os
+import shutil
 
 homeKeyframeGenTemp = "homeKeyframeGen(\"{}%\",\"{}%\")"
 awayKeyframeGenTemp = "awayKeyframeGen(\"{}%\",\"{}%\")"
+
+mappedDictionary = {
+    "passes": "Passes",
+    "possession_time_sec": "Pos. (Sec)",
+    "possession_percentage": "Pos. (%)",
+    "takeaways": "Takeaways",
+    "turnovers": "Turnovers",
+    "score": "Score",
+    "goals": "Goals",
+    "goal_succ_rate": "Goal %",
+    "shots": "Shots",
+    "faceoffs_won": "Faceoffs",
+    "saves": "Saves",
+    "blocks": "Blocks",
+    "post_hits": "P. hits",
+    "assists": "Assists",
+    "secondary_assists": "T. Goals",
+    'has_mercy_ruled' :'Mercy',
+    'turnovers' :'Turnovers',
+    'shutouts':'Shutouts',
+    'assists':'Assists',
+    'overtime_goals':'OT Goals',
+    'blocks':'Blocks',
+    'conceded_goals':'Conc. Goals',
+    'games_played':'Played',
+    'losses':'Loss',
+    'score':'Score',
+    'passes':'Passes',
+    'goals':'Goals',
+    'faceoffs_won':'Faceoffs',
+    'wins':'Wins',
+    'overtime_losses':'OT Loss',
+    'takeaways':'Takeaway',
+    'ties':'Tie',
+    'secondary_assists':'T. Goals',
+    'shutouts_against':'Shutouts A.',
+    'post_hits':'P. Hits',
+    'contributed_goals':'Cont. Goals',
+    'faceoffs_lost':'Faceoffs Lost',
+    'was_mercy_ruled':'Mercied',
+    'overtime_wins':'OT Win',
+    'saves':'Save',
+    'game_winning_goals':'GWG',
+    'shots':'Shots',
+    'primary_assists':'Duo Plays',
+    'possession_time_sec':'Pos. (S)',
+}
+
+
+styleCSS = """
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+.bghome {
+    height: 100%;
+    width: 100%;
+    background-color: blue;
+    transform: skew(0);
+    clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
+    box-shadow: 0px 10px rgba(0, 0, 0, 0.777);
+    display: flex;
+}
+
+.bgMid {
+    transform: skew(0);
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    display: flex;
+}
+
+.bgaway {
+    height: 100%;
+    width: 100%;
+    background-color: red;
+    clip-path: polygon(0 0, 90% 0, 100% 100%, 0% 100%);
+    transform: skew(0);
+    box-shadow: 0px 10px rgba(0, 0, 0, 0.777);
+    display: flex;
+}
+
+.container {
+    padding-left: 30px;
+    margin-right: 0px;
+    width: fit-content;
+    height: fit-content;
+    display: inline-block;
+}
+
+p {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    text-shadow: 3px 3px black;
+}
+
+
+.center {
+    margin-left: 50%;
+    width: fit-content;
+    height: fit-content;
+    transform: translate(-50%);
+}
+
+th {
+    width: auto;
+    height: auto;
+    padding-bottom: 1.5%;
+    padding-left: .5%;
+    padding-right: .5%;
+    filter: drop-shadow(10px 10px 0px rgba(0, 0, 0, 0.777))
+}
+
+td {
+    position: relative;
+    width: auto;
+    height: auto;
+    padding-bottom: 1.5%;
+    padding-left: .5%;
+    padding-right: .5%;
+    filter: drop-shadow(10px 10px 0px rgba(0, 0, 0, 0.777))
+}
+
+.home {
+    padding-bottom: 1.5%;
+    padding-left: .5%;
+    padding-right: .5%;
+}
+
+table {
+    width: 100%;
+    height: 100%;
+    padding: 1vh;
+}
+
+.bar-home {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    opacity: 0%;
+    /* Start with 0% width */
+    height: 100%;
+    background-color: blue;
+    /* Adjust the color as needed */
+    z-index: -1;
+    /* Send the bars behind the content */
+    /*animation: expandLeft 2s ease;*/
+    /* Animation for left to right */
+    animation-fill-mode: forwards;
+    text-align: right;
+}
+
+.bar-away {
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0%;
+    width: 0%;
+    /* Start with 0% width */
+    height: 100%;
+    background-color: red;
+    /* Adjust the color as needed */
+    z-index: -1;
+    /* Send the bars behind the content */
+    /*animation: expandRight 2s ease;*/
+    /* Animation for right to left */
+    animation-fill-mode: forwards;
+}
+.homeT {
+    position:relative;
+    padding-right: 50px;
+}
+.awayT {
+    position:relative;
+    padding-left: 50px;
+}
+
+@keyframes expandLeft {
+    0% {
+        width: 0%;
+        left: 100%;
+        /* Start from the right edge */
+    }
+
+    100% {
+        width: 95%;
+        left: 3%;
+        /* Fill towards the left */
+    }
+}
+
+@keyframes expandRight {
+    0% {
+        width: 0%;
+        right: 100%;
+    }
+
+    100% {
+        width: 95%;
+        right: 3%;
+    }
+}
+
+
+"""
+
+
 
 firstPart = '''
 <link rel="stylesheet" href="style.css">
@@ -124,17 +337,13 @@ def trans(x):
 
 
 
-s = StatPuller(
-    r"G:\Program Files\Steam\steamapps\common\SlapshotRebound\Slapshot_Data\\").getStats(["shots", "saves", "goal_succ_rate", "passes", "post_hits", "possession_time_sec"])
-
-
 
 def makeStats(stats: dict, homeTeam: Team, awayTeam: Team, dest: str):
     "Takes the stats made by a statPuller, the home team, and away team, followed by the destination, where an HTML file will be output containing the statistics needed"
     firstRow = f"""
             <tr>
             <th>
-                <div class="bghome" style="background-color: rgba({homeTeam.colour[0]},{homeTeam.colour[1]},{homeTeam.colour[2]});">
+                <div class="bghome" style="background-color: rgba({homeTeam.colour.R},{homeTeam.colour.G},{homeTeam.colour.B});">
                     <p>{homeTeam.teamName}</p>
                 </div>
             </th>
@@ -144,7 +353,7 @@ def makeStats(stats: dict, homeTeam: Team, awayTeam: Team, dest: str):
                 </div>
             </th>
             <th>
-                <div class="bgaway" style="background-color: rgba({awayTeam.colour[0]},{awayTeam.colour[1]},{awayTeam.colour[2]});">
+                <div class="bgaway" style="background-color: rgba({awayTeam.colour.R},{awayTeam.colour.G},{awayTeam.colour.B});">
                     <p>{awayTeam.teamName}</p>
                 </div>
             </th>
@@ -156,13 +365,14 @@ def makeStats(stats: dict, homeTeam: Team, awayTeam: Team, dest: str):
     tableRows = [firstRow]
     def addStat(s: Stat):
         biggest = max(s.statHomeScore, s.statAwayScore)
-        hS = s.statHomeScore/biggest
-        aS = s.statAwayScore/biggest
-        print(hS,aS)
-        hAnims.append(hk(hS))
-        aAnims.append(ak(aS))
-        tableRows.append(tableRowTemplate.format(
-            hS=s.statHomeScore, aS=s.statAwayScore, statN=s.statName, hC=f"{homeTeam.colour[0]},{homeTeam.colour[1]},{homeTeam.colour[2]}", hT=trans(hS), aC=f"{awayTeam.colour[0]},{awayTeam.colour[1]},{awayTeam.colour[2]}", aT=trans(aS)))
+        if biggest != 0:
+            hS = s.statHomeScore/biggest
+            aS = s.statAwayScore/biggest
+            print(hS,aS)
+            hAnims.append(hk(hS))
+            aAnims.append(ak(aS))
+            tableRows.append(tableRowTemplate.format(
+                hS=s.statHomeScore, aS=s.statAwayScore, statN=mappedDictionary[s.statName], hC=f"{homeTeam.colour.R},{homeTeam.colour.G},{homeTeam.colour.B}", hT=trans(hS), aC=f"{awayTeam.colour.R},{awayTeam.colour.G},{awayTeam.colour.B}", aT=trans(aS)))
         
     for stat in stats.values():
         addStat(stat)
@@ -177,13 +387,14 @@ def makeStats(stats: dict, homeTeam: Team, awayTeam: Team, dest: str):
         aAnimsStr += f"{x},"
     aAnimsStr += aAnims[-1]
 
-    with open(dest, "w") as f:
+    if not os.path.exists(dest):
+        os.makedirs(dest, exist_ok=True)
+    if not os.path.exists(f"{dest}\\style.css"):
+        with open(f"{dest}\\style.css", "w") as f:
+            f.write(styleCSS)
+
+    with open(f"{dest}\\board.html", "w") as f:
         f.write(firstPart.format(homeAnimations = hAnimsStr, awayAnimations = aAnimsStr))
         for row in tableRows:
             f.write(row)
         f.write(lastPart)
-
-hT = Team("Homelanders", 111, (255, 100, 0))
-aT = Team("Away Squad", 111, (0, 100, 255))
-
-makeStats(s, hT, aT, r"H:\!Personal Projects\Slap Streaming Toll Python Port\HTML Templates\export.html")

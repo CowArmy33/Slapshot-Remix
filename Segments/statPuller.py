@@ -1,6 +1,9 @@
 import os
 import json
 
+
+bannedStats = ['goal_succ_rate', 'possession_percentage','overtime_goals','conceded_goals','losses','wins','overtime_losses','ties','shutouts_against','contributed_goals','faceoffs_lost','was_mercy_ruled','overtime_wins','game_winning_goals','primary_assists','possession_time_sec']
+
 class Stat:
     def __init__(self, name, x) -> None:
         self.statName = name
@@ -15,8 +18,9 @@ class Stat:
         """
         return rpp
 class StatPuller:
-    def __init__(self, dirIn) -> None:
+    def __init__(self, dirIn, auto: bool) -> None:
         self.matchedDir = f"{dirIn}\\Matches"
+        self.autoStats = auto
 
     def retStat(text, x):
         home = 0
@@ -52,6 +56,8 @@ class StatPuller:
             if g["username"] == text:
                 return round(100*(g["stats"].get("goals", 0) / g["stats"].get("shots", 1)))
 
+    
+
     def getStats(self, array):
         
         file = max([self.matchedDir + f"\\{file}" for file in os.listdir(self.matchedDir)], key=os.path.getctime)
@@ -79,6 +85,17 @@ class StatPuller:
                 stats[stat] = goals
             else:
                 stats[stat] = Stat(stat, x)
+        allKnownStats = set()
+        for player in x['players']:
+            player = player["stats"]
+            for stat in player:
+                ss = Stat(stat, x)
+                allKnownStats.add(ss)
+        for stat in allKnownStats:
+            stat: Stat
+            if min(stat.statAwayScore, stat.statHomeScore) / max(stat.statAwayScore, stat.statHomeScore) < .2 and stat.statName not in bannedStats and stats.get(stat.statName) == None and self.autoStats:
+                stats[stat.statName] = stat
+
 
 
         return stats

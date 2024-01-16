@@ -1,6 +1,5 @@
 import Segments.scheduledGame
 import Segments.timestamp
-import Segments.teamScraper
 import customtkinter as tk
 from Segments.mainWindow import mainWindow
 

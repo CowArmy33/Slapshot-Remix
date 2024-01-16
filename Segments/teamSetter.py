@@ -1,7 +1,7 @@
 import os
 import shutil
-from scheduledGame import Colour, Team, getValidColours
-from PIL import Image, ImageDraw
+from Segments.scheduledGame import Colour, Team
+from PIL import Image
 
 
 def generate_gradient(
@@ -23,17 +23,28 @@ def generate_gradient(
     return base
 
 
-def setTeam(team: Team, path: str, colour):
+def setTeam(team: Team, path: str, colour, gamedir):
     if not os.path.exists(path):
         os.makedirs(path, exist_ok=True)
     img = Image.new("RGB", (1, 1), colour)
-    logo = team.image
+    logo = os.path.normpath(os.path.join(gamedir,"StreamingAssets",team.image))
+    print("===============",logo)
     players = team.players
-    shutil.copyfile(logo, f'{path}\\logo{path[-4:]}.png')
-    with open(f'{path}\\players{path[-4:]}.txt', 'w') as file:
-        for x in players[:-1]:
-            file.write(x + "\n")
-        file.write(players[-1])
+    print(f'{path}\\logo{path[-4:]}.png')
+    if os.path.exists(logo):
+        print(1)
+        shutil.copyfile(logo, f'{path}\\logo{path[-4:]}.png')
+    elif os.path.exists(f'{path}\\logo{path[-4:]}.png'):
+        print(2)
+        os.remove(f'{path}\\logo{path[-4:]}.png')
+    if players != None:
+        with open(f'{path}\\players{path[-4:]}.txt', 'w') as file:
+            for x in players[:-1]:
+                file.write(x + "\n")
+            file.write(players[-1])
+    else:
+        with open(f'{path}\\players{path[-4:]}.txt', 'w') as file:
+            file.write("")
     img.save(f'{path}\\colour{path[-4:]}.png', "png")
     with open(f'{path}\\name{path[-4:]}.txt', 'w') as file:
         file.write(team.teamName)
@@ -41,17 +52,15 @@ def setTeam(team: Team, path: str, colour):
         file.write(team.accronym)
     
 
-def setTeams(team1: Team, team2: Team, basePath: str):
+def setTeams(team1: Team, team2: Team, basePath: str, gamedir:str):
     homePath = basePath + "\\Home"
     awayPath = basePath + "\\Away"
     gradientPath = basePath + "\\NonTeam"
-    c1,c2 = team1.colour, team2.colour
-    c1,c2 = getValidColours(c1,c2)
-    c1,c2 = c1.getRGB(), c2.getRGB()
+    c1, c2 = team1.colour.getRGB(), team2.colour.getRGB()
     if not os.path.exists(gradientPath):
         os.makedirs(gradientPath, exist_ok=True)
-    setTeam(team1, homePath, c1)
-    setTeam(team2, awayPath, c2)
+    setTeam(team1, homePath, c1, gamedir)
+    setTeam(team2, awayPath, c2, gamedir)
 
     baseImg = generate_gradient(c1, c2, 1920, 1080)
     baseImg.save(gradientPath + "\\gradient.png", "png")
