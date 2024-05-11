@@ -58,3 +58,8 @@ The open config button will open the configuration menu in which you were able t
 This program is best utilized in advance in order to set up all of the different games that may be streamed in one night. It also attempts to manage all of the individual statistics and processing in a way that the streamer doesn't have to worry about actually computing or thinking about any of the additional details that may need to be thought of without this program. As such, for the most part, this program attempts to make everything a 1 click usage and as simple as possible. So that way you can commentate over high paced games. An additional thing that I can say that this program handles is the team lists. It automatically pulls the team lists from the slapshot player stat sheet that you put into the configuration menu. And as such, it should keep it 100% up to date. There currently is no easy way for manual team list entries into the program. So if this issue does arise, you will very likely need to create a text file or change the source in OBS manually.
 
 If you run into any problems setting this up or testing this program out, please contact me. I will try and make sure to get back to you as quickly as possible.
+
+# Logos and clubs.json
+Below there will be a link to another repository managed by me, which contains the current up-to-date logos and clubs.json that will be used for this season. Once again, you can either download that repository manually every time that you want to update your logos and clubs file, Or you can clone the repository into the streaming assets folder and simply run a pull git command whenever you want to update your assets.
+
+https://github.com/CowArmy33/StreamingAssets
