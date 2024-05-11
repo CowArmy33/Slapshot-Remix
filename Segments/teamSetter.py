@@ -38,10 +38,10 @@ def setTeam(team: Team, path: str, colour, gamedir):
         print(2)
         os.remove(f'{path}\\logo{path[-4:]}.png')
     if players != None:
-        with open(f'{path}\\players{path[-4:]}.txt', 'w') as file:
+        with open(f'{path}\\players{path[-4:]}.txt', 'wb') as file:
             for x in players[:-1]:
-                file.write(x + "\n")
-            file.write(players[-1])
+                file.write((x + "\n").encode())
+            file.write((players[-1]).encode())
     else:
         with open(f'{path}\\players{path[-4:]}.txt', 'w') as file:
             file.write("")

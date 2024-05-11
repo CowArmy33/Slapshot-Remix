@@ -5,9 +5,13 @@ import json
 bannedStats = ['goal_succ_rate', 'possession_percentage','overtime_goals','conceded_goals','losses','wins','overtime_losses','ties','shutouts_against','contributed_goals','faceoffs_lost','was_mercy_ruled','overtime_wins','game_winning_goals','primary_assists','possession_time_sec']
 
 class Stat:
-    def __init__(self, name, x) -> None:
+    def __init__(self, name, x, flip) -> None:
         self.statName = name
-        self.statHomeScore, self.statAwayScore = StatPuller.retStat(name, x)
+        flip = not flip
+        if not flip:
+            self.statHomeScore, self.statAwayScore = StatPuller.retStat(name, x)
+        else:
+            self.statAwayScore, self.statHomeScore = StatPuller.retStat(name, x)
         self.bestPlayer = StatPuller.getHighest(name, x)
     def __repr__(self) -> str:
         rpp = f"""
@@ -18,10 +22,10 @@ class Stat:
         """
         return rpp
 class StatPuller:
-    def __init__(self, dirIn, auto: bool) -> None:
+    def __init__(self, dirIn, auto: bool, flip: bool) -> None:
         self.matchedDir = f"{dirIn}\\Matches"
         self.autoStats = auto
-
+        self.flip = flip
     def retStat(text, x):
         home = 0
         away = 0
@@ -67,7 +71,7 @@ class StatPuller:
         stats = {}
         for stat in array:
             if stat == "possession_percentage":
-                possesion = Stat("possession_time_sec", x)
+                possesion = Stat("possession_time_sec", x, self.flip)
                 total = possesion.statAwayScore + possesion.statHomeScore
                 possesion.statName = "possession_percentage"
                 possesion.statAwayScore = round(100*(possesion.statAwayScore/total))
@@ -75,8 +79,8 @@ class StatPuller:
                 possesion.bestPlayer = (possesion.bestPlayer[0], round(100*(possesion.bestPlayer[1]/total)))
                 stats[stat] = possesion
             elif stat == "goal_succ_rate":
-                goals = Stat("goals", x)
-                shots = Stat("shots", x)
+                goals = Stat("goals", x, self.flip)
+                shots = Stat("shots", x, self.flip)
                 goals.statAwayScore = round(100*(goals.statAwayScore/shots.statAwayScore))
                 goals.statHomeScore = round(100*(goals.statHomeScore/shots.statHomeScore))
                 goals.statName = "goal_succ_rate"
@@ -84,12 +88,12 @@ class StatPuller:
                 goals.bestPlayer = (goals.bestPlayer[0], self.getBestShotAcc(goals.bestPlayer[0], x))
                 stats[stat] = goals
             else:
-                stats[stat] = Stat(stat, x)
+                stats[stat] = Stat(stat, x, self.flip)
         allKnownStats = set()
         for player in x['players']:
             player = player["stats"]
             for stat in player:
-                ss = Stat(stat, x)
+                ss = Stat(stat, x, self.flip)
                 allKnownStats.add(ss)
         for stat in allKnownStats:
             stat: Stat

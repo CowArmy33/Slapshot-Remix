@@ -28,8 +28,9 @@ class mainWindow:
         with open(mainWindow.settingsFile, "w") as g:
             json.dump(mainWindow.settings, g)
     def loadSettings():
-        with open(mainWindow.settingsFile, "r") as g:
-            mainWindow.settings = json.load(g)
+        if os.path.exists(mainWindow.settingsFile):
+            with open(mainWindow.settingsFile, "r") as g:
+                mainWindow.settings = json.load(g)
     def addhomeScore():
         mainWindow.homeScore +=1
         with open(os.path.join(mainWindow.settings['asset_output'],"Home","scoreHome.txt"), "w") as f:
@@ -54,7 +55,7 @@ class mainWindow:
     def pullStats(self):
         try:
             statslist = [x for x, y, in mainWindow.settings.items() if y == 1]
-            stats = StatPuller(mainWindow.settings["matches_input"], mainWindow.settings["auto_stats"]).getStats(statslist)
+            stats = StatPuller(mainWindow.settings["matches_input"], mainWindow.settings["auto_stats"], self.flipTeamsToggle.get()).getStats(statslist)
             print(stats)
         except:
             print("Something went wrong with pulling stats")
@@ -153,6 +154,9 @@ class mainWindow:
         self.fetchStatsButton = tk.CTkButton(
             master=self.frame1, text="Fetch Last Period", command=self.pullStats)
         self.fetchStatsButton.pack(padx=DEFAULTSPACING, pady=DEFAULTSPACING)
+        self.flipTeamsToggle = tk.CTkCheckBox(
+            master=self.frame1, text="Flip Stats")
+        self.flipTeamsToggle.pack(padx=DEFAULTSPACING, pady=DEFAULTSPACING)
 
         self.newGameButton = tk.CTkButton(
             master=self.frame1, text="Add Game", command=addGameWindow)

@@ -7,9 +7,12 @@ def loadTeams(dir, link):
     dir = dir + r"\StreamingAssets\clubs.json"
     x = json.load(open(dir, "rb"))
     link = link.replace("/edit#", "/export?format=csv&")
-    playerData = requests.get(link).content.decode().strip().splitlines()
-    playerData = [x.split(",") for x in playerData]
-    playerData = [[x[1], x[5]] for x in playerData]
+    if link not in ['', None]:
+        playerData = requests.get(link).content.decode().strip().splitlines()
+        playerData = [x.split(",") for x in playerData]
+        playerData = [[x[1], x[5]] for x in playerData]
+    else:
+        playerData = []
     lst = []
     for g in x:
         g: dict

@@ -321,8 +321,13 @@ def genBoard(t1: Team, t2: Team, allteams: list[Team], teamStatsURL: str, out: s
   x:ladderTeam
   for x in teamClassList:
     if  x.league == LeagueRequested:
-        anotherPage += "<tr><td style=\"background-color: {}88;\"><img src=\"http://absolute/{}\"></td><td style=\"background-color: {}88;\">{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(
-            f"#{x.team.colour.getHex()}",path.join(slapdir,"StreamingAssets",x.team.image.replace("/", "\\")), f"#{x.team.colour.getHex()}", x.team.teamName, x.points, x.Wins, x.otWins, x.Losses, x.otLosses)
+        if type(x.team.image) is type(None):
+          print("ERROR ON TEAM: ",x.team.teamName, ", ARE THEY IN THE CLUBS LIST?")
+          anotherPage += "<tr><td style=\"background-color: {}88;\"><img src=\"http://absolute/{}\"></td><td style=\"background-color: {}88;\">{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(
+              f"#{x.team.colour.getHex()}","ERROR HERE", f"#{x.team.colour.getHex()}", x.team.teamName, x.points, x.Wins, x.otWins, x.Losses, x.otLosses)
+        else:
+          anotherPage += "<tr><td style=\"background-color: {}88;\"><img src=\"http://absolute/{}\"></td><td style=\"background-color: {}88;\">{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(
+              f"#{x.team.colour.getHex()}",path.normpath(path.join(slapdir,"StreamingAssets",x.team.image)), f"#{x.team.colour.getHex()}", x.team.teamName, x.points, x.Wins, x.otWins, x.Losses, x.otLosses)
   anotherPage += "</table></body></html>"
 
   writer = open(f"{out}\ladder.html", "w")
