@@ -63,3 +63,8 @@ If you run into any problems setting this up or testing this program out, please
 Below there will be a link to another repository managed by me, which contains the current up-to-date logos and clubs.json that will be used for this season. Once again, you can either download that repository manually every time that you want to update your logos and clubs file, Or you can clone the repository into the streaming assets folder and simply run a pull git command whenever you want to update your assets.
 
 https://github.com/CowArmy33/StreamingAssets
+
+# OBS Scene Collection
+Below is a link that will take you to a page where you can generate an advanced Scene Collection that SHOULD allow you to make full use of all of the assets mentioned previously, just ensure that you have already generated the nescecary files, and direct the program to the correct directory, otherwise errors may occur.
+
+https://github.com/CowArmy33/Slapshot-Setup
