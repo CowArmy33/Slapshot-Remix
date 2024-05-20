@@ -1,0 +1,4 @@
+colorspacious
+customtkinter
+requests
+pillow

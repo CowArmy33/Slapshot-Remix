@@ -10,9 +10,9 @@ Its intended to handle various tasks automatically for the streamer, such as:
 - ❌ Showcasing statistics during gameplay
 
 # Install
-There may be a bit of setup required by the user in order to use this, which will include using the latest version of python. But essentially, you can brute force your way through this by installing python, and running "pip install (package name)" for any packages that may not be included in the default installation. I will be adding a requirements.txt later to make this significantly easier, but at the current point in time deal with it i guess.
+There may be a bit of setup required by the user in order to use this, which will include python (preferably the latest version, but older ones may not have issues). There is a file called "requirements.txt", which contains a list of dependancies (not that many), which can be used to install everything needed. Simply run the command "pip install -r requirements.txt" with a terminal / command prompt open within that directory.
 
-Next, you will need to download this repository, either through the download button on Github, or you may want to use the Github Command line interface to clone this repository and update it in the future when more updates get made. It should not be too difficult to do this. And if you aren't sure how to, then please go ahead and Google it Otherwise, you can just download the repository at its current point in time, which may make getting updates a little bit more difficult. Either way works fine, just go ahead and do what you're more comfortable with. 
+Next, you will need to download this repository, either through the download button on Github, or you may want to use the Github Command Line interface to clone this repository and update it in the future when more updates get made. It should not be too difficult to do this. And if you aren't sure how to, then please go ahead and Google it Otherwise, you can just download the repository at its current point in time, which may make getting updates a little bit more difficult. Either way works fine, just go ahead and do what you're more comfortable with. 
 
 Once you have python installed and are ready to go and all dependancies set up, you can run the program by running "main.py".
 
