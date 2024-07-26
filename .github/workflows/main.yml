@@ -1,10 +1,9 @@
-name: Build Executable
+name: Build Executable and Source Code Archive
 
 on:
   push:
-    branches: [ main ]
-  release:
-    types: [created]
+    tags:
+      - 'v*.*.*'  # This will trigger the workflow for any tag starting with 'v'
 
 jobs:
   build:
@@ -22,9 +21,23 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
     - name: Build executable
-      run: pyinstaller --onefile main.py
+      run: pyinstaller --onefile Slapshot_Remix_${{ github.ref_name }}.py
+    - name: Create source code archive
+      run: |
+        7z a -tzip source_code_${{ github.ref_name }}.zip . -xr!.git -xr!dist -xr!build
     - name: Upload executable
       uses: actions/upload-artifact@v2
       with:
-        name: your_app
-        path: dist/main.exe
+        name: Slapshot_Remix_${{ github.ref_name }}
+        path: dist/Slapshot_Remix_${{ github.ref_name }}.exe
+    - name: Upload source code archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: source_code_${{ github.ref_name }}
+        path: source_code_${{ github.ref_name }}.zip
+    - name: Upload to release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/Slapshot_Remix_${{ github.ref_name }}.exe
+          source_code_${{ github.ref_name }}.zip
