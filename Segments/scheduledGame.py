@@ -62,6 +62,8 @@ class Team:
         self.players = players
         self.accronym = accronym
         self.league = league
+        if self.image == None:
+            self.image = "None"
     def newTeamColour(self, cIn: Colour):
         return Team(self.teamName,self.accronym,self.discordId,cIn,self.image,self.league, self.players)
     def __repr__(self):

@@ -6,7 +6,7 @@ from Segments.sheetGen import makeStats
 from Segments.teamLoader import loadTeams
 from Segments.teamSetter import setTeams
 from Segments.schedule import createSchedule
-from tkinter import colorchooser
+from tkinter import colorchooser, simpledialog
 import json
 import os
 import pickle
@@ -57,8 +57,9 @@ class mainWindow:
             statslist = [x for x, y, in mainWindow.settings.items() if y == 1]
             stats = StatPuller(mainWindow.settings["matches_input"], mainWindow.settings["auto_stats"], self.flipTeamsToggle.get()).getStats(statslist)
             print(stats)
-        except:
+        except Exception as exc:
             print("Something went wrong with pulling stats")
+            print(exc)
         makeStats(stats, mainWindow.homeTeam, mainWindow.awayTeam, self.settings['asset_output'])
     def resolveTeam(self, name: str):
         t = [x for x in mainWindow.teamsList if x.teamName == name][0]
@@ -264,29 +265,55 @@ class addGameWindow:
             self.leagues["IM"].deselect()
             self.leagues["OPEN"].deselect()
             self.leagues["ALL"].deselect()
+            self.leagues["SHOW"].deselect()
+            self.leagues["TOURNEY"].deselect()
             setOptions("Pro")
         def setIM():
             self.leagues["PRO"].deselect()
             self.leagues["IM"].select()
             self.leagues["OPEN"].deselect()
             self.leagues["ALL"].deselect()
+            self.leagues["SHOW"].deselect()
+            self.leagues["TOURNEY"].deselect()
             setOptions("Intermediate")
         def setOpen():
             self.leagues["PRO"].deselect()
             self.leagues["IM"].deselect()
             self.leagues["OPEN"].select()
             self.leagues["ALL"].deselect()
+            self.leagues["SHOW"].deselect()
+            self.leagues["TOURNEY"].deselect()
             setOptions("Open")
         def setAll():
             self.leagues["PRO"].deselect()
             self.leagues["IM"].deselect()
             self.leagues["OPEN"].deselect()
             self.leagues["ALL"].select()
+            self.leagues["SHOW"].deselect()
+            self.leagues["TOURNEY"].deselect()
             setOptions("All")
+        def setShow():
+            self.leagues["PRO"].deselect()
+            self.leagues["IM"].deselect()
+            self.leagues["OPEN"].deselect()
+            self.leagues["ALL"].deselect()
+            self.leagues["SHOW"].select()
+            self.leagues["TOURNEY"].deselect()
+            setOptions("Show")
+        def setTourney():
+            self.leagues["PRO"].deselect()
+            self.leagues["IM"].deselect()
+            self.leagues["OPEN"].deselect()
+            self.leagues["ALL"].deselect()
+            self.leagues["SHOW"].deselect()
+            self.leagues["TOURNEY"].select()
+            setOptions("Tourney")
         self.leagues["PRO"] = tk.CTkRadioButton(master = self.leagueFrame, text="Pro League", command=setPro)
         self.leagues["IM"] = tk.CTkRadioButton(master = self.leagueFrame, text="Intermediate League", command=setIM)
         self.leagues["OPEN"] = tk.CTkRadioButton(master = self.leagueFrame, text="Open League", command=setOpen)
         self.leagues["ALL"] = tk.CTkRadioButton(master = self.leagueFrame, text="All", command=setAll)
+        self.leagues["SHOW"] = tk.CTkRadioButton(master = self.leagueFrame, text="Show Match", command=setShow)
+        self.leagues["TOURNEY"] = tk.CTkRadioButton(master = self.leagueFrame, text="Tourney Match", command=setTourney)
         for rad in self.leagues.values():
             rad.pack(padx=DEFAULTSPACING, pady=DEFAULTSPACING, anchor="w")
         self.leagueFrame.pack(padx=DEFAULTSPACING, pady=DEFAULTSPACING)
@@ -309,16 +336,30 @@ class addGameWindow:
         self.moogleButton.pack(padx=DEFAULTSPACING, pady=DEFAULTSPACING)
         setPro()
         self.root.mainloop()
-    
-    def out(self):
-        homeTeam = mainWindow.resolveTeam(mainWindow, self.homeTeamPicker.get())
-        awayTeam = mainWindow.resolveTeam(mainWindow, self.awayTeamPicker.get())
+
+    def showMatchOut(self):
+        leastGoodColour = int(255/2)
+        homeTeam = Team(simpledialog.askstring("Home Name", "What's the name of the home team?"), simpledialog.askstring("Home Acro", "What's the acronym?"), None, Colour(leastGoodColour, leastGoodColour, leastGoodColour), None, "SHOW", None)
+        awayTeam = Team(simpledialog.askstring("Away Name", "What's the name of the away team?"), simpledialog.askstring("Away Acro", "What's the acronym?"), None, Colour(leastGoodColour, leastGoodColour, leastGoodColour), None, "SHOW", None)
         hour = int(self.timeHour.get())
         minute = int(self.timeMinute.get())
         g = Game(homeTeam=homeTeam, awayTeam=awayTeam, hour=hour, minute= minute)
         mainWindow.gamesList.append(g)
         createSchedule(mainWindow.gamesList, mainWindow.settings["asset_output"], mainWindow.settings["matches_input"])
         self.root.destroy()
+    
+    def out(self):
+        if not self.leagues["SHOW"].select:
+            homeTeam = mainWindow.resolveTeam(mainWindow, self.homeTeamPicker.get())
+            awayTeam = mainWindow.resolveTeam(mainWindow, self.awayTeamPicker.get())
+            hour = int(self.timeHour.get())
+            minute = int(self.timeMinute.get())
+            g = Game(homeTeam=homeTeam, awayTeam=awayTeam, hour=hour, minute= minute)
+            mainWindow.gamesList.append(g)
+            createSchedule(mainWindow.gamesList, mainWindow.settings["asset_output"], mainWindow.settings["matches_input"])
+            self.root.destroy()
+        else:
+            self.showMatchOut()
         
 
     def newEntry(self, text):
