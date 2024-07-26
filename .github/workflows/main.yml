@@ -21,24 +21,15 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
     - name: Build executable
-      run: pyinstaller --onefile main.py
-    - name: Create source code archive
-      run: |
-        7z a -tzip source_code_${{ github.ref_name }}.zip . -x!.git -x!dist -x!build
-
+      run: pyinstaller --onefile --name "Slapshot_Remix_${{ github.ref_name }}.exe" main.py
     - name: Upload executable
       uses: actions/upload-artifact@v2
       with:
         name: Slapshot_Remix_${{ github.ref_name }}
         path: dist/Slapshot_Remix_${{ github.ref_name }}.exe
-    - name: Upload source code archive
-      uses: actions/upload-artifact@v2
-      with:
-        name: source_code_${{ github.ref_name }}
-        path: source_code_${{ github.ref_name }}.zip
     - name: Upload to release
       uses: softprops/action-gh-release@v1
       with:
         files: |
           dist/Slapshot_Remix_${{ github.ref_name }}.exe
-          source_code_${{ github.ref_name }}.zip
+        draft: true
