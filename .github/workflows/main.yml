@@ -4,7 +4,14 @@ on:
   push:
     tags:
       - 'v*.*.*'  # This will trigger the workflow for any tag starting with 'v'
-
+permissions:
+  contents: write  # Allows read and write access to repository contents
+  actions: read    # Allows read access to actions
+  issues: read     # Allows read access to issues
+  pull-requests: write  # Allows read and write access to pull requests
+  deployments: write  # Allows write access to deployments
+  statuses: write     # Allows write access to commit statuses
+  packages: write     # Allows write access to packages
 jobs:
   build:
     runs-on: windows-latest
