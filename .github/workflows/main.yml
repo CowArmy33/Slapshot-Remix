@@ -21,7 +21,7 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
     - name: Build executable
-      run: pyinstaller --onefile Slapshot_Remix_${{ github.ref_name }}.py
+      run: pyinstaller --onefile main.py
     - name: Create source code archive
       run: |
         7z a -tzip source_code_${{ github.ref_name }}.zip . -xr!.git -xr!dist -xr!build
